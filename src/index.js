@@ -1,57 +1,67 @@
-const express = require('express');
-const { json, urlencoded } = require('body-parser');
-const { randomBytes } = require('crypto');
-const tasksJson = require('../db.json');
+const express = require("express");
+const { json, urlencoded } = require("body-parser");
+const { randomBytes } = require("crypto");
+const { cors } = require("cors");
+const tasksJson = require("../db.json");
 
-const app = express()
+const app = express();
 const port = process.env.PORT || 3000;
 
 const tasks = tasksJson.tasks;
 
 const updateDbJson = () => {
-  const fs = require('fs');
-  const path = require('path');
-  const filePath = path.join(__dirname, '../db.json');
+  const fs = require("fs");
+  const path = require("path");
+  const filePath = path.join(__dirname, "../db.json");
   const data = JSON.stringify({ tasks: tasks }, null, 2);
   fs.writeFileSync(filePath, data);
 };
 
 const isValidTask = (task) => {
-  return task.title && task.title.toString().trim() !== '' && task.description && task.description.toString().trim() !== '';
+  return (
+    task.title &&
+    task.title.toString().trim() !== "" &&
+    task.description &&
+    task.description.toString().trim() !== ""
+  );
 };
 
 app.use(json()); // for parsing application/json
 app.use(urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
-
-app.get('/', (_, res) => {
-  res.send('Welcome to TUES simple TODO server');
+app.get("/", (_, res) => {
+  res.send("Welcome to TUES simple TODO server");
 });
 
-app.get('/tasks', (_, res) => {
+app.get("/tasks", (_, res) => {
   res.send(tasks);
 });
 
-app.get('/tasks/:id', (req, res) => {
-  res.send(tasks.find(x => x.id === req.params.id));
+app.get("/tasks/:id", (req, res) => {
+  res.send(tasks.find((x) => x.id === req.params.id));
 });
 
-app.put('/tasks/:id', (req, res) => {
+app.put("/tasks/:id", (req, res) => {
   if (!isValidTask(req.body)) {
     res.status(422);
     res.send({
-      message: 'Title and description are required'
+      message: "Title and description are required",
     });
     return;
   }
 
   const id = req.params.id;
-  const task = tasks.find(x => x.id === id);
+  const task = tasks.find((x) => x.id === id);
 
   if (!task) {
     res.status(404);
     res.send({
-      message: 'Task not found'
+      message: "Task not found",
     });
     return;
   }
@@ -59,17 +69,16 @@ app.put('/tasks/:id', (req, res) => {
   task.title = req.body.title;
   task.description = req.body.description;
   task.isInProgress = req.body.isInProgress;
-  task.completed = req.body.completed;  
+  task.completed = req.body.completed;
   updateDbJson();
   res.send(task);
 });
 
-
-app.post('/tasks', (req, res) => {
+app.post("/tasks", (req, res) => {
   if (!isValidTask(req.body)) {
     res.status(422);
     res.send({
-      message: 'Title and description are required'
+      message: "Title and description are required",
     });
     return;
   }
@@ -81,13 +90,13 @@ app.post('/tasks', (req, res) => {
   res.send(newTask);
 });
 
-app.delete('/tasks/:id', (req, res) => {
-  const task = tasks.find((x)=> x.id === req.params.id);
+app.delete("/tasks/:id", (req, res) => {
+  const task = tasks.find((x) => x.id === req.params.id);
 
   if (!task) {
     res.status(404);
     res.send({
-      message: 'Task not found'
+      message: "Task not found",
     });
     return;
   }
@@ -99,5 +108,5 @@ app.delete('/tasks/:id', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`The server runs on port ${port}`)
+  console.log(`The server runs on port ${port}`);
 });
