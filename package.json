@@ -1,0 +1,25 @@
+{
+  "name": "simple-todo-server",
+  "version": "1.0.0",
+  "description": "TUES simple TODO server for educational perposes",
+  "main": "index.js",
+  "scripts": {
+    "test": " "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bbogdanov/simple-todo-server.git"
+  },
+  "keywords": [
+    "tues",
+    "simple",
+    "todo",
+    "server"
+  ],
+  "author": "Bogdan Bogdanov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bbogdanov/simple-todo-server/issues"
+  },
+  "homepage": "https://github.com/bbogdanov/simple-todo-server#readme"
+}
