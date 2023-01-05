@@ -1,17 +1,20 @@
-import express, { json, urlencoded } from 'express';
-import { randomBytes } from "crypto";
+const express = require('express');
+const { json, urlencoded } = require('body-parser');
+const { randomBytes } = require('crypto');
+const tasksJson = require('../db.json');
+
 const app = express()
 const port = process.env.PORT || 3000;
 
-const tasks = [
-  {
-    id: randomBytes(16).toString("hex"),
-    title: 'Example',
-    description: 'This one is a simple description of a todo task',
-    isInProgress: false,
-    completed: false,
-  }
-];
+const tasks = tasksJson.tasks;
+
+const updateDbJson = () => {
+  const fs = require('fs');
+  const path = require('path');
+  const filePath = path.join(__dirname, '../db.json');
+  const data = JSON.stringify({ tasks: tasks }, null, 2);
+  fs.writeFileSync(filePath, data);
+};
 
 const isValidTask = (task) => {
   return task.title && task.title.toString().trim() !== '' && task.description && task.description.toString().trim() !== '';
@@ -19,6 +22,7 @@ const isValidTask = (task) => {
 
 app.use(json()); // for parsing application/json
 app.use(urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+
 
 app.get('/', (_, res) => {
   res.send('Welcome to TUES simple TODO server');
@@ -55,7 +59,8 @@ app.put('/tasks/:id', (req, res) => {
   task.title = req.body.title;
   task.description = req.body.description;
   task.isInProgress = req.body.isInProgress;
-  task.completed = req.body.completed;
+  task.completed = req.body.completed;  
+  updateDbJson();
   res.send(task);
 });
 
@@ -72,6 +77,7 @@ app.post('/tasks', (req, res) => {
   const newTask = req.body;
   newTask.id = randomBytes(16).toString("hex");
   tasks.push(newTask);
+  updateDbJson();
   res.send(newTask);
 });
 
@@ -88,6 +94,7 @@ app.delete('/tasks/:id', (req, res) => {
 
   const index = tasks.indexOf(task);
   tasks.splice(index, 1);
+  updateDbJson();
   res.send(task);
 });
 

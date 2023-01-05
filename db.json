@@ -1,0 +1,11 @@
+{
+  "tasks": [
+    {
+      "id": "b0bd99d2b353a22764aa88f70ac37e9e",
+      "title": "Example",
+      "description": "This one is a simple description of a todo task",
+      "isInProgress": false,
+      "completed": false
+    }
+  ]
+}

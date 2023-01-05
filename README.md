@@ -23,10 +23,6 @@ This is a simple TODO RESTful server written in Node. It uses a simple JSON form
 
   Use the [API](#api) section to know what is available to use on the server.
 
-### !!! Disclaimer !!!
-
-The server is not persistent. If you restart it, all the data will be lost.
-
 ### Configuration
 
 In order to change the port of the server, you can change the `port` variable inside `src/index.js`.
