@@ -1,7 +1,7 @@
 const express = require("express");
 const { json, urlencoded } = require("body-parser");
 const { randomBytes } = require("crypto");
-const { cors } = require("cors");
+const cors = require("cors");
 const tasksJson = require("../db.json");
 
 const app = express();
